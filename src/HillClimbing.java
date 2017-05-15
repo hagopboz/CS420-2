@@ -8,12 +8,10 @@ public class HillClimbing {
 
     private int n1;
     private NQueen problem;
-
     private boolean isBatchTest = false;
 
     public HillClimbing(int n) {
         n1 = n;
-
         problem = new NQueen(n);
         problem.genBoard();
     }
@@ -36,9 +34,7 @@ public class HillClimbing {
                     if (i != columnMark[j]) {
                         int[] possibleMove = columnMark.clone();
                         possibleMove[j] = i;
-
                         NQueen possibleState = new NQueen(possibleMove);
-
                         int possibleNonAttacks = possibleState.countNonAttacks();
 
                         if (possibleNonAttacks > currentNonAttacks) {
@@ -50,17 +46,17 @@ public class HillClimbing {
                     }
                 }
             }
-
             problem = currentState;
         }
 
-        if (!isBatchTest)
+        if (!isBatchTest) {
             problem.printBoard();
-
-        if (problem.goalState())
+        }
+        if (problem.goalState()) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     public static void run() {
@@ -78,19 +74,17 @@ public class HillClimbing {
                 int n = Integer.valueOf(keyboard.nextLine());
 
                 HillClimbing hc = new HillClimbing(n);
-                if (hc.solve())
+                if (hc.solve()) {
                     System.out.println("Problem solved");
-                else
+                } else {
                     System.out.println("Failed to solve problem, try again");
-
+                }
                 System.out.println("(Hill-Climbing)X to exit, else continue...");
                 keyboard = new Scanner(System.in);
                 choice = keyboard.nextLine();
             }
-
         } else if (choice.equals("b") || choice.equals("B")) {
             System.out.println("(Hill-Climbing)Please specify the number of queens:");
-
             keyboard = new Scanner(System.in);
             int n = Integer.valueOf(keyboard.nextLine());
 
@@ -98,10 +92,10 @@ public class HillClimbing {
             for (int i = 0; i < 100; ++i) {
                 HillClimbing hc = new HillClimbing(n);
                 hc.setBatchTest(true);
-                if (hc.solve())
+                if (hc.solve()) {
                     ++numOfSolved;
+                }
             }
-
             System.out.println(numOfSolved + " out of 100 solved.");
         }
     }

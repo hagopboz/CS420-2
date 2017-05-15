@@ -10,9 +10,7 @@ public class Genetic {
     private List<NQueen> pop;
     private int[] popChance;
     private int popSize;
-
     private Random RAND = new Random();
-
     private boolean isBatchTest = false;
 
     public Genetic(int n, int initPopSize) {
@@ -21,11 +19,9 @@ public class Genetic {
         popChance = new int[initPopSize];
         popSize = initPopSize;
 
-        //init pop
         for (int i = 0; i < initPopSize; ++i) {
             NQueen child = new NQueen(n);
             child.genBoard();
-
             pop.add(child);
         }
     }
@@ -44,7 +40,6 @@ public class Genetic {
 
     private void Fitness() {
         Collections.sort(pop, new FitnessComparator());
-
         int sum = 0;
         int i = 0;
         for (NQueen child : pop) {
@@ -59,22 +54,24 @@ public class Genetic {
 
         int parent1 = 0;
         int rand = RAND.nextInt(sum);
-        for (; parent1 < popSize; ++parent1)
-            if (rand < popChance[parent1])
+        for (; parent1 < popSize; ++parent1) {
+            if (rand < popChance[parent1]) {
                 break;
-
+            }
+        }
         int parent2 = parent1;
         while (parent2 == parent1) {
             rand = RAND.nextInt(sum);
-            for (parent2 = 0; parent2 < popSize; ++parent2)
-                if (rand < popChance[parent2])
+            for (parent2 = 0; parent2 < popSize; ++parent2) {
+                if (rand < popChance[parent2]) {
                     break;
+                }
+            }
         }
-
         List<NQueen> parents = new ArrayList<>();
         parents.add(pop.get(parent1));
         parents.add(pop.get(parent2));
-
+        
         return parents;
     }
 
@@ -90,7 +87,6 @@ public class Genetic {
         } else {
             start = splice;
             end = n1;
-
         }
 
         for (int i = start; i < end; ++i) {
@@ -112,25 +108,19 @@ public class Genetic {
             dna[RAND.nextInt(n1)] = RAND.nextInt(n1);
             child.setColumnMark(dna);
         }
-
         return child;
     }
 
-
     public int breed(int maxGeneration) {
         int generation = 0;
-
         int maxNonAttacks = 0;
         while (generation < maxGeneration) {
             Fitness();
-
             List<NQueen> newPopulation = new ArrayList<>();
 
             for (int pair = 0; pair < popSize / 2; ++pair) {
                 List<NQueen> parents = randomSelect();
-
                 List<NQueen> children = reproduce(parents);
-
                 newPopulation.addAll(children);
             }
 
@@ -141,10 +131,10 @@ public class Genetic {
                     maxNonAttacks = child.getnonAttack();
                 }
 
-                // success
                 if (child.goalState()) {
-                    if (!isBatchTest)
+                    if (!isBatchTest) {
                         child.printBoard();
+                    }
                     return generation;
                 }
             }
@@ -152,12 +142,11 @@ public class Genetic {
             pop = newPopulation;
             popSize = newPopulation.size();
             popChance = new int[popSize];
-
             ++generation;
-            if (!isBatchTest && generation % 10000 == 0)
+            if (!isBatchTest && generation % 10000 == 0) {
                 System.out.println(generation + " Generation: current non-attack queens = " + maxNonAttacks);
+            }
         }
-
         return generation;
     }
 
@@ -174,30 +163,25 @@ public class Genetic {
         if (choice.equals("a") || choice.equals("A")) {
             while (!choice.equals("x") && !choice.equals("X")) {
                 System.out.println("(Genetic)Number of Queens: ");
-
                 keyboard = new Scanner(System.in);
                 int n = Integer.valueOf(keyboard.nextLine());
-
                 System.out.println("(Genetic)Size of population (even number): ");
-
                 keyboard = new Scanner(System.in);
                 int populationSize = Integer.valueOf(keyboard.nextLine());
-
                 Genetic ga = new Genetic(n, populationSize);
                 int generation = ga.breed(maxGeneration);
 
-                if (generation < maxGeneration)
-                    System.out.printf("Goal reached at %d generation.\n", generation);
-                else
+                if (generation < maxGeneration) {
+                    System.out.printf("Goal reached at %d generation.\n", generation); 
+                } else {
                     System.out.println("Failed to find a goal.");
-
+                }
                 System.out.println("(Genetic)X to exit Genetic, else continue...");
                 keyboard = new Scanner(System.in);
                 choice = keyboard.nextLine();
             }
         } else if (choice.equals("b") || choice.equals("B")) {
             System.out.println("(Genetic)Number of Queens: ");
-
             keyboard = new Scanner(System.in);
             int n = Integer.valueOf(keyboard.nextLine());
 
@@ -207,14 +191,13 @@ public class Genetic {
                 for (int round = 0; round < maxRound; ++round) {
                     Genetic ga = new Genetic(n, 4);
                     ga.setBatchTest(true);
-
                     int generation = ga.breed(maxGeneration);
-
-                    if (generation < maxGeneration)
+                    
+                    if (generation < maxGeneration) {
                         System.out.printf("Goal reached at %d generation(s).\n", generation);
-                    else
+                    } else { 
                         System.out.println("Couldn't find goal.");
-
+                    }
                     totalGeneration += generation;
                 }
 
