@@ -156,8 +156,8 @@ public class Genetic {
 
         String choice;
         System.out.println("(Genetic)Select mode: ");
-        System.out.print("(a)One run");
-        System.out.print("(b)Batch run");
+        System.out.println("(a)One run");
+        System.out.println("(b)Batch run");
         Scanner keyboard = new Scanner(System.in);
         choice = keyboard.nextLine();
         if (choice.equals("a") || choice.equals("A")) {
